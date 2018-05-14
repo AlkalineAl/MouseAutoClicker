@@ -22,62 +22,53 @@ namespace MouseAutoClicker
 
         private RelayCommand startCommand;
 
-        public RelayCommand AddCommand
-        {
-            get
-            {
-                return addCommand ??
+        public RelayCommand AddCommand => addCommand ??
                   (addCommand = new RelayCommand(obj =>
                   {
                       var pointerPosition = CoreWindow.GetForCurrentThread().PointerPosition;
                       Coordinate coordinate = new Coordinate()
                       {
 
-                          XCoord = pointerPosition.X ,
+                          XCoord = pointerPosition.X,
                           YCoord = pointerPosition.Y,
                       };
                       Coordinates.Insert(0, coordinate);
                       SelectedCoordinate = coordinate;
-                      AmountCoordinates = "Всего значений: "+Coordinates.Count();
+                      AmountCoordinates = "Всего значений: " + Coordinates.Count();
                   }));
-            }
-        }
 
-        public RelayCommand StartCommand
+        public RelayCommand GetStartCommand()
         {
-            get
-            {
-                return startCommand ??
-                  (startCommand = new RelayCommand(obj =>
-                  {
-                      
-                      InjectedInputPoint injectedInputPoint = new InjectedInputPoint();
-                      injectedInputPoint.PositionX = 1817;
-                      injectedInputPoint.PositionY = 0;
+            return startCommand ??
+              (startCommand = new RelayCommand(obj =>
+              {
+
+                  InjectedInputPoint injectedInputPoint = new InjectedInputPoint();
+                  injectedInputPoint.PositionX = 1817;
+                  injectedInputPoint.PositionY = 0;
                       //injectedInputPoint.PointerOptions.
 
                       CoreWindow.GetForCurrentThread().PointerPosition = new Point(injectedInputPoint.PositionX, injectedInputPoint.PositionY);
                       //InjectedInputMouseOptions.Absolute(); Cursor.Position = new Point(400, 700);
                       InputInjector inputInjector = InputInjector.TryCreate();
-                      var down = new InjectedInputMouseInfo();
-                      down.MouseOptions = InjectedInputMouseOptions.LeftDown;
-                      var up = new InjectedInputMouseInfo();
-                      up.MouseOptions = InjectedInputMouseOptions.LeftUp;
-                      Task.Delay(1500);
-                      inputInjector.InjectMouseInput(new[] { down, up });
-                      injectedInputPoint.PositionX = 0;
-                      injectedInputPoint.PositionY = 0;
-                      CoreWindow.GetForCurrentThread().PointerPosition = new Point(injectedInputPoint.PositionX, injectedInputPoint.PositionY);
-                      Task.Delay(15000);
-                      inputInjector.InjectMouseInput(new[] { down});
-                      injectedInputPoint.PositionX = 879;
-                      injectedInputPoint.PositionY = 115;
-                      CoreWindow.GetForCurrentThread().PointerPosition = new Point(injectedInputPoint.PositionX, injectedInputPoint.PositionY);
-                      inputInjector.InjectMouseInput(new[] { down, up });
-                      inputInjector.InjectMouseInput(new[] { down, up });
+                  var down = new InjectedInputMouseInfo();
+                  down.MouseOptions = InjectedInputMouseOptions.LeftDown;
+                  var up = new InjectedInputMouseInfo();
+                  up.MouseOptions = InjectedInputMouseOptions.LeftUp;
+                  Task.Delay(1500);
+                  inputInjector.InjectMouseInput(new[] { down, up });
+                  injectedInputPoint.PositionX = 0;
+                  injectedInputPoint.PositionY = 0;
+                  CoreWindow.GetForCurrentThread().PointerPosition = new Point(injectedInputPoint.PositionX, injectedInputPoint.PositionY);
+                  Task.Delay(15000);
+                  inputInjector.InjectMouseInput(new[] { down });
+                  injectedInputPoint.PositionX = 879;
+                  injectedInputPoint.PositionY = 115;
+                  CoreWindow.GetForCurrentThread().PointerPosition = new Point(injectedInputPoint.PositionX, injectedInputPoint.PositionY);
+                  inputInjector.InjectMouseInput(new[] { down, up });
+                  inputInjector.InjectMouseInput(new[] { down, up });
 
-                  }));
-            }
+              }));
         }
 
 
