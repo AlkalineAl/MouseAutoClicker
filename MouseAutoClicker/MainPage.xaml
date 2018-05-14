@@ -10,6 +10,7 @@
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:controls1="using:Windows.UI.Xaml.Controls"
     mc:Ignorable="d">
+    
     <Page.Resources>
         <media:AcrylicBrush x:Key="HostBackdropBrush"
                             BackgroundSource="HostBackdrop"
@@ -25,15 +26,15 @@
 
 
 
-    <Grid Background="{StaticResource HostBackdropBrush}" >
+    <Grid Background="{StaticResource HostBackdropBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0,0" >
 
         <TextBlock Margin="20,14,0,0" Text="AutoClicker" FontSize="40" VerticalAlignment="Top"  IsColorFontEnabled="True"  FocusVisualSecondaryBrush="#FF373737"  Foreground="White" Height="52" HorizontalAlignment="Left" Width="396" />
-        <controls:DropShadowPanel Margin="0,115,34,0" HorizontalContentAlignment="Stretch"
+        <controls:DropShadowPanel Margin="1070,115,0,0" HorizontalContentAlignment="Stretch"
                                           VerticalContentAlignment="Stretch"
                                           BlurRadius="80" FlowDirection="LeftToRight" 
-                                          Color="Black" HorizontalAlignment="Right" Width="396" Height="679" VerticalAlignment="Top">
+                                          Color="Black" Height="679" VerticalAlignment="Top" HorizontalAlignment="Left" Width="396">
             <Grid Background="#FF393939"  Margin="0"  VerticalAlignment="Top"  Height="677">
-                <ListView x:Name="lv" Margin="0,0,0,50" Background="#FF393939" HorizontalAlignment="Right" Width="394">
+                <ListView x:Name="lv" ItemsSource="{Binding Coordinates}" SelectedItem="{Binding SelectedCoordinate}"  Margin="0,0,0,50" Background="#FF393939" HorizontalAlignment="Right" Width="394" ManipulationMode="All" SingleSelectionFollowsFocus="True">
                     <ListView.Header>
                         <controls:ScrollHeader Mode="QuickReturn" TargetListViewBase="{x:Bind lv}">
                             <Grid x:Name="MyHeaderGrid" MinHeight="80" Background="#FF393939">
@@ -47,35 +48,75 @@
                             </Grid>
                         </controls:ScrollHeader>
                     </ListView.Header>
-                    <ListView.Resources>
-                        <FontIconSource x:Key="AcceptIcon" Glyph="&#xE10B;"/>
-                        <FontIconSource x:Key="FlagIcon" Glyph="&#xE129;"/>
-                        <FontIconSource x:Key="DeleteIcon" Glyph="&#xE107;"/>
-
-                        <SwipeItems x:Key="left" Mode="Reveal">
-                            <SwipeItem Text="Accept" IconSource="{StaticResource AcceptIcon}"
-Background="#FFC5E0B4" Invoked="SwipeItem_Invoked"/>
-                            <SwipeItem Text="Flag" IconSource="{StaticResource FlagIcon}"
-Background="#FFFFE699" Invoked="SwipeItem_Invoked_1"/>
-                        </SwipeItems>
-                        <SwipeItems x:Key="right" Mode="Execute">
-                            <SwipeItem Text="Delete" IconSource="{StaticResource DeleteIcon}"
-Background="#FFF4B183" Invoked="SwipeItem_Invoked_2"/>
-                        </SwipeItems>
-                    </ListView.Resources>
-
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <SwipeControl Background="#FF393939" Height="50" Width="400" IsTapEnabled="False"  LeftItems="{StaticResource left}" RightItems="{StaticResource right}" IsDoubleTapEnabled="False" IsHoldingEnabled="False" IsRightTapEnabled="False">
-                                <TextBlock Text="{Binding Text}" FontSize="24" Foreground="White" Margin="12" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                            </SwipeControl>
+                            <StackPanel x:Name="SP" Orientation="Horizontal">
+                                <TextBlock Text="{Binding XCoord}" FontSize="24" Foreground="White" Margin="12" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding YCoord}" FontSize="24" Foreground="White" Margin="12" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <TextBlock Margin="28,0,0,0" Text="Всего значений: ++" Height="38" Foreground="White" FontSize="25"  TextWrapping="Wrap" VerticalAlignment="Bottom" FocusVisualMargin="0,0,0,0" TextAlignment="Start" TextLineBounds="TrimToBaseline"/>
+                <TextBlock Margin="28,0,0,0"   Text="{Binding AmountCoordinates, UpdateSourceTrigger=PropertyChanged}" Height="38" Foreground="White" FontSize="25"  TextWrapping="Wrap" VerticalAlignment="Bottom" FocusVisualMargin="0,0,0,0" TextAlignment="Start" TextLineBounds="TrimToBaseline"/>
             </Grid>
         </controls:DropShadowPanel>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="694,914,0,0" VerticalAlignment="Top" Click="Button_Click" Background="#FF393939"/>
+
+        <controls:DropShadowPanel Margin="90,120,0,0" HorizontalContentAlignment="Left"
+                                          VerticalContentAlignment="Top"
+                                          BlurRadius="80" FlowDirection="LeftToRight" 
+                                          Color="Black"  VerticalAlignment="Top" HorizontalAlignment="Left" Width="906" Height="398">
+            <Grid Background="#FF393939"  Margin="0,0,0,-38"  VerticalAlignment="Top" Width="906" Height="400">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="53*"/>
+                    <ColumnDefinition Width="98*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="75*"/>
+                    <RowDefinition Height="64*"/>
+                    <RowDefinition Height="64*"/>
+                    <RowDefinition Height="64*"/>
+                    <RowDefinition Height="64*"/>
+                    <RowDefinition Height="64*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Margin="10,10,0,0" Grid.Row="0" Text="Основные параметры" Foreground="White" FontSize="25"  TextWrapping="Wrap" FocusVisualMargin="0,0,0,0" TextAlignment="Start" TextLineBounds="TrimToBaseline" Height="58" VerticalAlignment="Top" Grid.ColumnSpan="2" />
+                <TextBlock Margin="10,10,0,0" Grid.Row="1" Text="Интервал нажатий мс:" Foreground="White" FontSize="25"  TextWrapping="Wrap" FocusVisualMargin="0,0,0,0" TextAlignment="Start" TextLineBounds="TrimToBaseline" Height="58" VerticalAlignment="Top" Grid.RowSpan="2"  />
+                <TextBlock Margin="10,10,0,0" Grid.Row="2" Text="Остановить после (кликов):" Foreground="White" FontSize="25"  TextWrapping="Wrap" FocusVisualMargin="0,0,0,0" TextAlignment="Start" TextLineBounds="TrimToBaseline" Height="58" VerticalAlignment="Top" Grid.RowSpan="2"  />
+                <TextBlock Margin="10,10,0,0" Grid.Row="3" Text="Кликов:" Foreground="White" FontSize="25"  TextWrapping="Wrap" FocusVisualMargin="0,0,0,0" TextAlignment="Start" TextLineBounds="TrimToBaseline" Height="58" VerticalAlignment="Top" Grid.RowSpan="2"  />
+                <TextBlock Margin="10,10,0,0" Grid.Row="4" Text="Остановить после (мин):" Foreground="White" FontSize="25"  TextWrapping="Wrap" FocusVisualMargin="0,0,0,0" TextAlignment="Start" TextLineBounds="TrimToBaseline" Height="58" VerticalAlignment="Top" Grid.RowSpan="2"  />
+                <TextBlock Margin="10,10,0,-4" Grid.Row="5" Text="Прошло времени" Foreground="White" FontSize="25"  TextWrapping="Wrap" FocusVisualMargin="0,0,0,0" TextAlignment="Start" TextLineBounds="TrimToBaseline" Height="58" VerticalAlignment="Top"  />
+                <TextBox x:Name="interval" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Margin="0,0,10,15"  Text="TextBox" VerticalAlignment="Stretch" RequestedTheme="Dark" FontSize="24"/>
+                <TextBox x:Name="stopAfterClick" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch" Margin="0,0,10,15"  Text="TextBox" VerticalAlignment="Stretch" RequestedTheme="Dark" FontSize="24"/>
+                <TextBox x:Name="clickCount" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch" Margin="0,0,10,15"  Text="TextBox" VerticalAlignment="Stretch" RequestedTheme="Dark" FontSize="24"/>
+                <TextBox x:Name="stopAfterMin" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Stretch" Margin="0,0,10,15"  Text="TextBox" VerticalAlignment="Stretch" RequestedTheme="Dark" FontSize="24"/>
+                <TextBox x:Name="totalTime" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Stretch" Margin="0,0,10,15"  Text="TextBox" VerticalAlignment="Stretch" RequestedTheme="Dark" FontSize="24"/>
+            </Grid>
+        </controls:DropShadowPanel>
+        <controls:DropShadowPanel Margin="90,571,0,0" HorizontalContentAlignment="Left"
+                                          VerticalContentAlignment="Top"
+                                          BlurRadius="80" FlowDirection="LeftToRight" 
+                                          Color="Black" Height="100" VerticalAlignment="Top" HorizontalAlignment="Left" Width="906">
+            <Grid Background="#FF393939"  Margin="0,0,0,-38"  VerticalAlignment="Top"  Height="100" Width="906">
+                <Grid.ColumnDefinitions>
+
+
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="63*"/>
+                    <RowDefinition Height="142*"/>
+
+                </Grid.RowDefinitions>
+
+                <TextBlock Margin="10,10,0,0" Grid.Row="0" Text="Параметры мыши" Foreground="White" FontSize="25"  TextWrapping="Wrap" FocusVisualMargin="0,0,0,0" TextAlignment="Start" TextLineBounds="TrimToBaseline" Height="58" VerticalAlignment="Top" Grid.RowSpan="2" />
+                <RadioButton Content="ЛКМ" IsChecked="True" HorizontalAlignment="Left" Margin="120,20,0,0" Grid.Row="1" VerticalAlignment="Top" RequestedTheme="Dark"/>
+                <RadioButton Content="ПКМ" HorizontalAlignment="Left" Margin="420,20,0,0" Grid.Row="1" VerticalAlignment="Top" RequestedTheme="Dark"/>
+
+
+            </Grid>
+        </controls:DropShadowPanel>
+        <Button Content="Сохранить" HorizontalAlignment="Left" Command="{Binding AddCommand}" Margin="1072,814,0,0" VerticalAlignment="Top"  Background="#FF393939" Width="179" RequestedTheme="Dark" BorderBrush="Black"/>
+        <Button Content="Загрузить" HorizontalAlignment="Left" Margin="1282,814,0,0" VerticalAlignment="Top"  Background="#FF393939" Width="179" RequestedTheme="Dark" BorderBrush="Black"/>
+        <Button Content="Старт" Command="{Binding StartCommand}" HorizontalAlignment="Left" Margin="1072,858,0,0" VerticalAlignment="Top"  Background="#FF393939" Width="389" RequestedTheme="Dark" BorderBrush="Black"/>
 
     </Grid>
 </Page>

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Input.Preview.Injection;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -26,7 +28,6 @@ namespace MouseAutoClicker
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        internal ObservableCollection<Item> Items { get; private set; }
 
         public MainPage()
         {
@@ -38,64 +39,15 @@ namespace MouseAutoClicker
             formattableTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             formattableTitleBar.ButtonInactiveForegroundColor = Colors.Transparent;
             CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
-
-            
+            coreTitleBar.ExtendViewIntoTitleBar = true;           
             this.InitializeComponent();
 
+            DataContext = new CoordinateViewModel();
 
-           
-            
-        }
-
-        private void SlidableListItem_RightCommandRequested(object sender, EventArgs e)
-        {
 
         }
 
-        private void SlidableListItem_LeftCommandRequested(object sender, EventArgs e)
-        {
 
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Items = new ObservableCollection<Item>();
-             for (var i = 0; i < 1000; i++)
-
-            {
-                lv.Items.Add(new Item() { Text = "Item " + i, Subject = "123" });
-
-            }
-
-
-            
-        }
-
-        private void SwipeItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
-        {
-
-        }
-
-        private void SwipeItem_Invoked_1(SwipeItem sender, SwipeItemInvokedEventArgs args)
-        {
-
-        }
-
-        private void SwipeItem_Invoked_2(SwipeItem sender, SwipeItemInvokedEventArgs args)
-        {
-
-        }
-    }
-
-    internal class Item
-    {
-        public Item()
-        {
-        }
-
-        public string Subject { get; set; }
-        public string Text { get; set; }
 
     }
 }
